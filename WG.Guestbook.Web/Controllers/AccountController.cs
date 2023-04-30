@@ -1,21 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using WG.Guestbook.Web.Domain;
+﻿using Microsoft.AspNetCore.Mvc;
 using WG.Guestbook.Web.Models.Account;
+using WG.Guestbook.Web.Services.Account;
 
 namespace WG.Guestbook.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        private readonly ILogger<AccountController> _logger;
+        private readonly IAccountService _accountService;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ILogger<AccountController> logger)
+        public AccountController(IAccountService accountService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
+            _accountService = accountService;
         }
 
         [HttpGet]
@@ -32,15 +27,12 @@ namespace WG.Guestbook.Web.Controllers
                 return View(model);
             }
 
-            var user = new User(model.UserName);
-
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-            _logger.LogInformation($"Registration for user {user.UserName}: {result}");
+            var result = await _accountService.RegisterAsync(model);
 
             if (!result.Succeeded)
             {
                 var justOneError = result.Errors.Count() == 1;
+
                 foreach (var error in result.Errors)
                 {
                     if (error.Code.Contains("user", StringComparison.OrdinalIgnoreCase) && justOneError)
@@ -60,12 +52,52 @@ namespace WG.Guestbook.Web.Controllers
                 return View(model);
             }
 
-            await _signInManager.SignInAsync(user, isPersistent: true);
-
             if (!string.IsNullOrEmpty(returnUrl))
             {
                 return Redirect(returnUrl);
             }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult Login(string? returnUrl)
+        {
+            var model = new LoginViewModel() { ReturnUrl = returnUrl };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await _accountService.LoginAsync(model);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(nameof(model.Password), "Nutzname oder Passwort falsch.");
+
+                return View(model);
+            }
+
+            if (!string.IsNullOrEmpty(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            var userName = User.Identity?.Name;
+
+            await _accountService.LogoutAsync(userName);
 
             return RedirectToAction("Index", "Home");
         }

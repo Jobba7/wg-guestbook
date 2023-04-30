@@ -1,0 +1,22 @@
+﻿@model LoginViewModel
+
+<div class="text-center">
+    <h1 class="display-4">Anmeldung</h1>
+    <div class="col-md-12">
+        <form method="post">
+            <div class="form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" class="form-control" placeholder="Nutzername" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" placeholder="Passwort" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Anmelden</button>
+        </form>
+        <p>Noch kein Konto? Dann registriere dich <a asp-action="Register" asp-route-ReturnUrl="@Model.ReturnUrl">hier</a>.</p>
+    </div>
+</div>

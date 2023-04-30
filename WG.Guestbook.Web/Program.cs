@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WG.Guestbook.Web.Domain;
 using WG.Guestbook.Web.Repositories;
+using WG.Guestbook.Web.Services.Account;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,8 @@ if (builder.Environment.IsDevelopment())
         options.Password.RequiredUniqueChars = 1;
     });
 }
+
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 var app = builder.Build();
 
