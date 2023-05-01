@@ -1,0 +1,28 @@
+﻿@model UpdateAccountViewModel
+
+<h1>Konto von @Model.CurrentUserName</h1>
+<form method="post">
+    <input hidden asp-for="CurrentUserName" value="@Model.CurrentUserName" />
+    <div class="form-group">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <label asp-for="NewUserName"></label>
+        <input asp-for="NewUserName" class="form-control" placeholder="@Model.NewUserName" />
+        <span asp-validation-for="NewUserName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CurrentPassword"></label>
+        <input asp-for="CurrentPassword" class="form-control" placeholder="Altes Passwort" />
+        <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NewPassword"></label>
+        <input asp-for="NewPassword" class="form-control" placeholder="Neues Passwort" />
+        <span asp-validation-for="NewPassword" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ConfirmNewPassword"></label>
+        <input asp-for="ConfirmNewPassword" class="form-control" placeholder="Neues Passwort wiederholen" />
+        <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Konto aktualisieren</button>
+</form>

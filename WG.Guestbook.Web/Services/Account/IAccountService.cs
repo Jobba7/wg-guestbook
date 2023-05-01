@@ -10,5 +10,7 @@ namespace WG.Guestbook.Web.Services.Account
         Task<SignInResult> LoginAsync(LoginViewModel model, bool isPersistent = true, bool lockoutOnFailure = false);
 
         Task<bool> LogoutAsync(string? userName = null);
+
+        Task<IdentityResult> UpdateAccountAsync(UpdateAccountViewModel model);
     }
 }

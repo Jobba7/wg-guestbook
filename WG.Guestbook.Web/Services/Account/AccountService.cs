@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Identity;
 using WG.Guestbook.Web.Domain;
 using WG.Guestbook.Web.Models.Account;
 
@@ -86,6 +87,66 @@ namespace WG.Guestbook.Web.Services.Account
             }
 
             return succeeded;
+        }
+
+        public async Task<IdentityResult> UpdateAccountAsync(UpdateAccountViewModel model)
+        {
+            var currentUserName = model.CurrentUserName.Trim();
+            var user = await _userManager.FindByNameAsync(currentUserName);
+
+            if (user == null)
+            {
+                _logger.LogWarning($"User {currentUserName} not found.");
+
+                var error = new IdentityError()
+                {
+                    Code = "UserNotFound",
+                    Description = $"User '{currentUserName}' could not be found."
+                };
+
+                return IdentityResult.Failed(error);
+            }
+
+            // Change Password
+            var result = IdentityResult.Success;
+            var oldPassword = model.CurrentPassword?.Trim();
+            var newPassword = model.NewPassword?.Trim();
+
+            if (!string.IsNullOrEmpty(oldPassword) &&
+                !string.IsNullOrEmpty(newPassword))
+            {
+                result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+
+                _logger.LogInformation($"Change Password from {currentUserName}: {result}");
+
+                if (!result.Succeeded)
+                {
+                    return result;
+                }
+            }
+
+            // Change Username
+            var newUserName = model.NewUserName.Trim();
+
+            if (!newUserName.Equals(currentUserName, StringComparison.OrdinalIgnoreCase))
+            {
+                user.UserName = newUserName;
+                result = await _userManager.UpdateAsync(user);
+
+                _logger.LogInformation($"Update UserName from {currentUserName} to {newUserName}: {result}");
+
+                if (!result.Succeeded)
+                {
+                    return result;
+                }
+
+                if (!await SignInAsync(user))
+                {
+                    _logger.LogWarning($"Sign in user {user.UserName} (old name {currentUserName}) failed!");
+                }
+            }
+
+            return result;
         }
     }
 }

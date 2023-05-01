@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using WG.Guestbook.Web.Models.Account;
 using WG.Guestbook.Web.Services.Account;
 
@@ -11,6 +13,70 @@ namespace WG.Guestbook.Web.Controllers
         public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Index()
+        {
+            var userName = User.Identity?.Name;
+
+            if (userName == null)
+            {
+                return BadRequest();
+            }
+
+            var model = new UpdateAccountViewModel()
+            {
+                CurrentUserName = userName,
+                NewUserName = userName
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(UpdateAccountViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (!string.IsNullOrEmpty(model.CurrentPassword) &&
+                string.IsNullOrEmpty(model.NewPassword))
+            {
+                ModelState.AddModelError(nameof(model.NewPassword), "Bitte gib dein neues Passwort an.");
+
+                return View(model);
+            }
+
+            var result = await _accountService.UpdateAccountAsync(model);
+
+            if (!result.Succeeded)
+            {
+                var justOneError = result.Errors.Count() == 1;
+
+                foreach (var error in result.Errors)
+                {
+                    if (error.Code.Contains("user", StringComparison.OrdinalIgnoreCase) && justOneError)
+                    {
+                        ModelState.AddModelError(nameof(model.NewUserName), error.Description);
+                    }
+                    else if (error.Code.Contains("password", StringComparison.OrdinalIgnoreCase) && justOneError)
+                    {
+                        ModelState.AddModelError(nameof(model.ConfirmNewPassword), error.Description);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
