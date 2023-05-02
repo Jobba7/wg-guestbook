@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using WG.Guestbook.Web.Domain;
 using WG.Guestbook.Web.Models.Account;
 
@@ -128,12 +127,12 @@ namespace WG.Guestbook.Web.Services.Account
             // Change Username
             var newUserName = model.NewUserName.Trim();
 
-            if (!newUserName.Equals(currentUserName, StringComparison.OrdinalIgnoreCase))
+            if (!newUserName.Equals(currentUserName))
             {
                 user.UserName = newUserName;
                 result = await _userManager.UpdateAsync(user);
 
-                _logger.LogInformation($"Update UserName from {currentUserName} to {newUserName}: {result}");
+                _logger.LogInformation($"Update username from {currentUserName} to {newUserName}: {result}");
 
                 if (!result.Succeeded)
                 {
