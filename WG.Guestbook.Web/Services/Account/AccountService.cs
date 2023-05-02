@@ -28,10 +28,23 @@ namespace WG.Guestbook.Web.Services.Account
 
             _logger.LogInformation($"Create user {user.UserName}: {result}");
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                await SignInAsync(user);
+                return result;
             }
+
+            await AddToRoleGuestAsync(user);
+            await SignInAsync(user);
+
+            return result;
+        }
+
+        private async Task<IdentityResult> AddToRoleGuestAsync(User user)
+        {
+            const string roleName = "Guest";
+            var result = await _userManager.AddToRoleAsync(user, roleName);
+
+            _logger.LogInformation($"Add user {user.UserName} to role {roleName}: {result}");
 
             return result;
         }
