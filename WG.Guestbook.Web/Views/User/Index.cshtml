@@ -18,7 +18,7 @@
                 <th scope="row">@count</th>
                 <td>@user.UserName</td>
                 <td>@user.RoleNames</td>
-                <td><a asp-action="Delete" asp-route-Id="@user.Id">löschen</a></td>
+                <td><a asp-action="Delete" asp-route-Id="@user.Id" onclick="return confirm('Nutzer @user.UserName wirklich dauerhaft löschen?')">löschen</a></td>
             </tr>
             count++;
         }

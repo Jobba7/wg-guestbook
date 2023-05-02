@@ -11,12 +11,15 @@ namespace WG.Guestbook.Web.Controllers
     public class UserController : Controller
     {
         private readonly UserManager<User> _userManager;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(UserManager<User> userManager)
+        public UserController(UserManager<User> userManager, ILogger<UserController> logger)
         {
             _userManager = userManager;
+            _logger = logger;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var usersDTO = new List<UserDTO>();
@@ -37,6 +40,28 @@ namespace WG.Guestbook.Web.Controllers
             var model = new UserListViewModel() { Users = usersDTO };
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string? id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            _logger.LogInformation($"Delete user {user.UserName}: {result}");
+
+            return RedirectToAction("Index");
         }
     }
 }
