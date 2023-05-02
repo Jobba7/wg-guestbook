@@ -18,5 +18,7 @@ namespace WG.Guestbook.Web.Models.Account
         [DataType(DataType.Password)]
         [Compare(nameof(Password), ErrorMessage = "Passwörter stimmen nicht überein.")]
         public string ConfirmPassword { get; set; } = string.Empty;
+
+        public string? ReturnUrl { get; set; }
     }
 }

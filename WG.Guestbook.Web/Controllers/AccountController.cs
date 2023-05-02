@@ -80,9 +80,10 @@ namespace WG.Guestbook.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult Register(string? returnUrl)
         {
-            return View();
+            var model = new RegisterViewModel() { ReturnUrl = returnUrl };
+            return View(model);
         }
 
         [HttpPost]
