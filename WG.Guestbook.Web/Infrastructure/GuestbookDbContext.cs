@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WG.Guestbook.Web.Domain;
 
-namespace WG.Guestbook.Web.Repositories
+namespace WG.Guestbook.Web.Infrastructure
 {
     public class GuestbookDbContext : IdentityDbContext<User>
     {

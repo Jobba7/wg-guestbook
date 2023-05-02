@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WG.Guestbook.Web.Domain;
-using WG.Guestbook.Web.Repositories;
+using WG.Guestbook.Web.Infrastructure;
 using WG.Guestbook.Web.Services.Account;
 
 var builder = WebApplication.CreateBuilder(args);

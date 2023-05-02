@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WG.Guestbook.Web.Repositories;
+using WG.Guestbook.Web.Infrastructure;
 
 #nullable disable
 
 namespace WG.Guestbook.Web.Migrations
 {
     [DbContext(typeof(GuestbookDbContext))]
-    [Migration("20230502144528_AddRoles")]
-    partial class AddRoles
+    [Migration("20230502161109_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,19 +54,19 @@ namespace WG.Guestbook.Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "34aa7a1f-58bd-4cf5-b6dc-fa772608507b",
+                            Id = "b55a24b3-85d4-45e3-a804-45885315db11",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8a95ea6f-8095-4526-95b6-ea1ed4260752",
+                            Id = "ec885eeb-ac95-45ac-a75d-00a74b080e51",
                             Name = "Guest",
                             NormalizedName = "GUEST"
                         },
                         new
                         {
-                            Id = "4461c996-6579-4f97-847a-48b1f1825ef4",
+                            Id = "6c11ac09-0227-4e95-bf38-6d8da15b9359",
                             Name = "Roommate",
                             NormalizedName = "ROOMMATE"
                         });
@@ -161,8 +161,8 @@ namespace WG.Guestbook.Web.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "e1940b25-256d-491c-8c6b-9f7bbf566135",
-                            RoleId = "34aa7a1f-58bd-4cf5-b6dc-fa772608507b"
+                            UserId = "44ef2116-1556-4901-95b2-75796c5d52c5",
+                            RoleId = "b55a24b3-85d4-45e3-a804-45885315db11"
                         });
                 });
 
@@ -252,15 +252,15 @@ namespace WG.Guestbook.Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e1940b25-256d-491c-8c6b-9f7bbf566135",
+                            Id = "44ef2116-1556-4901-95b2-75796c5d52c5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c96913ea-be5d-41d4-95a6-ab4ce8a4950d",
+                            ConcurrencyStamp = "bd03275a-40d6-4731-a48a-5d0df9425d4a",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFqdojHWOKHFHE3UMvwhPhSvdbTDbyKbpfEhlidDRlcirUvN8i1Yjm1nbpmuXtfxrw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIGLiw3CxT6IuDAvU0upllR/F8rs+bFP1LI2bhHL6I8qlDInHSLYbBQbhFjtNCIBkQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e815946b-cad9-44c1-bd75-25fea01cbc39",
+                            SecurityStamp = "eedf8b8a-8daa-475a-90bd-c228fc77a860",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
