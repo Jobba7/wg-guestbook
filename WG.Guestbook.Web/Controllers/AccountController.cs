@@ -8,10 +8,12 @@ namespace WG.Guestbook.Web.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, ILogger<AccountController> logger)
         {
             _accountService = accountService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -80,17 +82,32 @@ namespace WG.Guestbook.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register(string? returnUrl)
+        public IActionResult Register(string? id, string? returnUrl)
         {
-            var model = new RegisterViewModel() { ReturnUrl = returnUrl };
+            var model = new RegisterViewModel()
+            {
+                RegistrationCode = id ?? string.Empty,
+                ReturnUrl = returnUrl
+            };
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model, string? returnUrl)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
             {
+                return View(model);
+            }
+
+            const string registerCode = "CubaLibreX3000";
+
+            if(!registerCode.Equals(model.RegistrationCode?.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                _logger.LogWarning($"Attempted registration without a valid code. User: {model.UserName.Trim()}");
+
+                ModelState.AddModelError(nameof(model.RegistrationCode), "Ungültiger Code. Bitte kontaktiere die WG, um einen gültigen Code zu erhalten.");
+
                 return View(model);
             }
 
@@ -119,9 +136,9 @@ namespace WG.Guestbook.Web.Controllers
                 return View(model);
             }
 
-            if (!string.IsNullOrEmpty(returnUrl))
+            if (!string.IsNullOrEmpty(model.ReturnUrl))
             {
-                return Redirect(returnUrl);
+                return Redirect(model.ReturnUrl);
             }
 
             return RedirectToAction("Index", "Home");
@@ -146,7 +163,7 @@ namespace WG.Guestbook.Web.Controllers
 
             if (!result.Succeeded)
             {
-                ModelState.AddModelError(nameof(model.Password), "Nutzname oder Passwort falsch.");
+                ModelState.AddModelError(nameof(model.Password), result.ToString());
 
                 return View(model);
             }

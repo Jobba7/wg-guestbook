@@ -69,7 +69,7 @@ namespace WG.Guestbook.Web.Services.Account
             return succeeded;
         }
 
-        public async Task<SignInResult> LoginAsync(LoginViewModel model, bool isPersistent = true, bool lockoutOnFailure = false)
+        public async Task<SignInResult> LoginAsync(LoginViewModel model, bool isPersistent = true, bool lockoutOnFailure = true)
         {
             var userName = model.UserName.Trim();
             var password = model.Password.Trim();

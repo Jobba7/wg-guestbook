@@ -19,6 +19,10 @@ namespace WG.Guestbook.Web.Models.Account
         [Compare(nameof(Password), ErrorMessage = "Passwörter stimmen nicht überein.")]
         public string ConfirmPassword { get; set; } = string.Empty;
 
+        [Display(Name = "Registrierungscode")]
+        [Required(ErrorMessage = "Bitte gib den Code ein, den du von der WG erhalten hast.")]
+        public string RegistrationCode { get; set; }
+
         public string? ReturnUrl { get; set; }
     }
 }
