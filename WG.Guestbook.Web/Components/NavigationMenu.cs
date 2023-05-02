@@ -32,7 +32,12 @@ namespace WG.Guestbook.Web.Components
 
             if (user == null)
             {
-                _logger.LogWarning($"User {User.Identity?.Name} is signed in, but the user was found.");
+                _logger.LogWarning($"User {User.Identity?.Name} is signed in, but the user was not found (probably deleted).");
+
+                var task = _signInManager.SignOutAsync();
+                await task;
+
+                _logger.LogInformation($"Logout {User.Identity?.Name}: {task.IsCompletedSuccessfully}");
 
                 return View(new NavigationMenuViewModel() { IsSignedIn = false });
             }
