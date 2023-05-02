@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WG.Guestbook.Web.Repositories;
 
@@ -11,9 +12,11 @@ using WG.Guestbook.Web.Repositories;
 namespace WG.Guestbook.Web.Migrations
 {
     [DbContext(typeof(GuestbookDbContext))]
-    partial class GuestbookDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230502144528_AddRoles")]
+    partial class AddRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

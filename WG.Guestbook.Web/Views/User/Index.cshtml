@@ -5,7 +5,7 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Nutzername</th>
-            <th scope="col">Rolle</th>
+            <th scope="col">Rollen</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -18,7 +18,10 @@
                 <th scope="row">@count</th>
                 <td>@user.UserName</td>
                 <td>@user.RoleNames</td>
-                <td><a asp-action="Delete" asp-route-Id="@user.Id" onclick="return confirm('Nutzer @user.UserName wirklich dauerhaft löschen?')">löschen</a></td>
+                <td>
+                    <a asp-action="UpdateUserRoles" asp-route-Id="@user.Id">Rollen bearbeiten</a> |
+                    <a asp-action="Delete" asp-route-Id="@user.Id" onclick="return confirm('Nutzer @user.UserName wirklich dauerhaft löschen?')">löschen</a>
+                </td>
             </tr>
             count++;
         }

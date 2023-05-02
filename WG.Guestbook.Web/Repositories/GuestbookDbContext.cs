@@ -32,6 +32,20 @@ namespace WG.Guestbook.Web.Repositories
             builder.Entity<IdentityRole>().HasData(role);
             builder.Entity<User>().HasData(user);
             builder.Entity<IdentityUserRole<string>>().HasData(userRole);
+
+            // seed roles
+            builder.Entity<IdentityRole>().HasData(new IdentityRole[] {
+                new IdentityRole()
+                {
+                    Name = "Guest",
+                    NormalizedName = "GUEST"
+                },
+                new IdentityRole()
+                {
+                    Name ="Roommate",
+                    NormalizedName="ROOMMATE"
+                }
+            });
         }
     }
 }

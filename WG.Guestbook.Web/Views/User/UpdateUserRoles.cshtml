@@ -1,0 +1,18 @@
+﻿@model UpdateUserRolesViewModel
+
+<h1>Rollen von @Model.UserName</h1>
+<div>
+    <form method="post">
+        <input hidden asp-for="@Model.UserId" />
+        @for(var i = 0; i < Model.Roles.Count; i++)
+        {
+            <div class="form-check m-1">
+                <input hidden asp-for="@Model.Roles[i].Id" />
+                <input hidden asp-for="@Model.Roles[i].Name" />
+                <input asp-for="@Model.Roles[i].Selected" class="form-check-input"/>
+                <label class="form-check-label">@Model.Roles[i].Name</label>
+            </div>
+        }
+        <button type="submit" class="btn btn-primary">Rollen aktualisieren</button>
+    </form>
+</div>
