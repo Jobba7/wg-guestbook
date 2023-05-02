@@ -1,4 +1,4 @@
-﻿namespace WG.Guestbook.Web.Models.Account
+﻿namespace WG.Guestbook.Web.Models.Layout
 {
     public class LoginPanelViewModel
     {

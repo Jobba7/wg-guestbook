@@ -6,11 +6,11 @@ using WG.Guestbook.Web.Models.Layout;
 
 namespace WG.Guestbook.Web.Components
 {
-    public class LoginPanel : ViewComponent
+    public class NavigationMenu : ViewComponent
     {
         private readonly SignInManager<User> _signInManager;
 
-        public LoginPanel(SignInManager<User> signInManager)
+        public NavigationMenu(SignInManager<User> signInManager)
         {
             _signInManager = signInManager;
         }
@@ -25,7 +25,7 @@ namespace WG.Guestbook.Web.Components
                 isSignedIn = _signInManager.IsSignedIn(principal);
             }
 
-            var model = new LoginPanelViewModel()
+            var model = new NavigationMenuViewModel()
             {
                 IsSignedIn = isSignedIn,
                 UserName = userName
