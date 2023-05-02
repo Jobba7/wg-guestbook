@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WG.Guestbook.Web.Models.Account;
 using WG.Guestbook.Web.Services.Account;
@@ -36,6 +35,7 @@ namespace WG.Guestbook.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Index(UpdateAccountViewModel model)
         {
             if (!ModelState.IsValid)
