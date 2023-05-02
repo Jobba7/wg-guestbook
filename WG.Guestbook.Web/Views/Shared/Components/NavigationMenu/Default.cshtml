@@ -15,6 +15,12 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">Konto</a>
                     </li>
                 }
+                @if (Model.IsAdmin)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Nutzer</a>
+                    </li>
+                }
             </ul>
             <vc:login-panel></vc:login-panel>
         </div>

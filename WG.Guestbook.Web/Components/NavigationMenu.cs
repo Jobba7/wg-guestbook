@@ -9,26 +9,41 @@ namespace WG.Guestbook.Web.Components
     public class NavigationMenu : ViewComponent
     {
         private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly ILogger<NavigationMenu> _logger;
 
-        public NavigationMenu(SignInManager<User> signInManager)
+        public NavigationMenu(SignInManager<User> signInManager, UserManager<User> userManager, ILogger<NavigationMenu> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
+            _logger = logger;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var userName = User.Identity?.Name;
-            var isSignedIn = false;
+            var isSignedIn = _signInManager.IsSignedIn((ClaimsPrincipal)User);
 
-            if (User is ClaimsPrincipal principal)
+            if (!isSignedIn)
             {
-                isSignedIn = _signInManager.IsSignedIn(principal);
+                return View(new NavigationMenuViewModel() { IsSignedIn = false });
             }
+
+            var user = await _userManager.GetUserAsync((ClaimsPrincipal)User);
+
+            if (user == null)
+            {
+                _logger.LogWarning($"User {User.Identity?.Name} is signed in, but the user was found.");
+
+                return View(new NavigationMenuViewModel() { IsSignedIn = false });
+            }
+
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
             var model = new NavigationMenuViewModel()
             {
                 IsSignedIn = isSignedIn,
-                UserName = userName
+                UserName = user.UserName,
+                IsAdmin = isAdmin
             };
 
             return View(model);

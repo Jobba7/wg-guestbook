@@ -4,6 +4,8 @@
     {
         public bool IsSignedIn { get; set; }
 
+        public bool IsAdmin { get; set; }
+
         public string? UserName { get; set; }
     }
 }

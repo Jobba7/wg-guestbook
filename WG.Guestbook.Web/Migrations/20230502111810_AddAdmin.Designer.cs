@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WG.Guestbook.Web.Repositories;
 
@@ -11,9 +12,11 @@ using WG.Guestbook.Web.Repositories;
 namespace WG.Guestbook.Web.Migrations
 {
     [DbContext(typeof(GuestbookDbContext))]
-    partial class GuestbookDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230502111810_AddAdmin")]
+    partial class AddAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,9 +54,8 @@ namespace WG.Guestbook.Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1cb86bb5-8953-47eb-9ac1-d246ebef5778",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
+                            Id = "59a6f57d-f425-4fca-b5a6-660119474022",
+                            Name = "Admin"
                         });
                 });
 
@@ -146,8 +148,8 @@ namespace WG.Guestbook.Web.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "8ad5f657-ea6e-4df7-b7b2-d847baf75f52",
-                            RoleId = "1cb86bb5-8953-47eb-9ac1-d246ebef5778"
+                            UserId = "9e9617b8-a581-4619-9b37-8338df4b98a5",
+                            RoleId = "59a6f57d-f425-4fca-b5a6-660119474022"
                         });
                 });
 
@@ -237,15 +239,14 @@ namespace WG.Guestbook.Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8ad5f657-ea6e-4df7-b7b2-d847baf75f52",
+                            Id = "9e9617b8-a581-4619-9b37-8338df4b98a5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "36255d49-666d-4d6b-a5ef-d8641ee33cc0",
+                            ConcurrencyStamp = "d095778b-8611-489d-8cb9-5d3848284e9d",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKhZP2jOWmh+P7e0NeYSTRRvJdsGO+w83eMZ/5l8xnalXHQSSzaNmJb7W+5nTx5sgw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDTeCgnB4KokjbyZFCs7nzl8I4VLvghLHQLXNaL77OmtJj4ZvvKPPl00wl45w2XTdg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "761b6dd7-ff55-4599-bb95-f6a12454d2a1",
+                            SecurityStamp = "8ecaca52-095f-4540-9b35-366134df973b",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });

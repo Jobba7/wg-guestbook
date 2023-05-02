@@ -168,5 +168,12 @@ namespace WG.Guestbook.Web.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public IActionResult AccessDenied(string? returnUrl)
+        {
+            var model = new AccesDeniedViewModel() { ReturnUrl = returnUrl };
+            return View(model);
+        }
     }
 }
