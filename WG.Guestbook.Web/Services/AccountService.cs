@@ -2,7 +2,7 @@
 using WG.Guestbook.Web.Domain;
 using WG.Guestbook.Web.Models.Account;
 
-namespace WG.Guestbook.Web.Services.Account
+namespace WG.Guestbook.Web.Services
 {
     public class AccountService : IAccountService
     {
@@ -15,6 +15,21 @@ namespace WG.Guestbook.Web.Services.Account
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+        }
+
+        public bool CheckRegistrationCode(string? code)
+        {
+            const string registerCode = "CubaLibreX3000";
+            code = code?.Trim();
+
+            if (!registerCode.Equals(code, StringComparison.OrdinalIgnoreCase))
+            {
+                _logger.LogWarning($"Attempted registration without a valid code. Code: {code}");
+
+                return false;
+            }
+
+            return true;
         }
 
         public async Task<IdentityResult> RegisterAsync(RegisterViewModel model)

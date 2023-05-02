@@ -1,19 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WG.Guestbook.Web.Models.Account;
-using WG.Guestbook.Web.Services.Account;
+using WG.Guestbook.Web.Services;
 
 namespace WG.Guestbook.Web.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
-        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAccountService accountService, ILogger<AccountController> logger)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
-            _logger = logger;
         }
 
         [HttpGet]
@@ -100,12 +98,8 @@ namespace WG.Guestbook.Web.Controllers
                 return View(model);
             }
 
-            const string registerCode = "CubaLibreX3000";
-
-            if(!registerCode.Equals(model.RegistrationCode?.Trim(), StringComparison.OrdinalIgnoreCase))
+            if (!_accountService.CheckRegistrationCode(model.RegistrationCode))
             {
-                _logger.LogWarning($"Attempted registration without a valid code. User: {model.UserName.Trim()}");
-
                 ModelState.AddModelError(nameof(model.RegistrationCode), "Ungültiger Code. Bitte kontaktiere die WG, um einen gültigen Code zu erhalten.");
 
                 return View(model);
