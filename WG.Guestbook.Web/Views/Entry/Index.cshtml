@@ -14,6 +14,7 @@
                     <h5 class="card-title">Von @entry.Author über den Tag am @entry.VisitDate.ToLongDateString()</h5>
                     <h6 class="card-subtitle mb-2 text-muted">@entry.CreateDate</h6>
                     <p class="card-text">@entry.Content</p>
+                    <a asp-action="Details" asp-route-id="@entry.Id">Details</a>
                 </div>
             </div>
         }
