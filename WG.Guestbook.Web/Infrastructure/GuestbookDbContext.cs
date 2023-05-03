@@ -7,9 +7,16 @@ namespace WG.Guestbook.Web.Infrastructure
 {
     public class GuestbookDbContext : IdentityDbContext<User>
     {
+        public DbSet<Entry> Entries { get; set; }
+
         public GuestbookDbContext(DbContextOptions<GuestbookDbContext> options) : base(options)
         {
             // ensure that DbContext type accepts a DbContextOptions<TContext> object in its constructor and passes it to the base constructor for DbContext
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -46,6 +53,27 @@ namespace WG.Guestbook.Web.Infrastructure
                     NormalizedName="ROOMMATE"
                 }
             });
+
+            // relationships
+            builder.Entity<User>().HasMany(u => u.Entries).WithOne(e => e.Author);
+            builder.Entity<Entry>().HasOne(e => e.Author).WithMany(u => u.Entries);
+
+            // seed entries
+            builder.Entity<Entry>().HasData(new
+            {
+                Id = Guid.NewGuid().ToString(),
+                AuthorId = user.Id,
+                Content = "Hello World!",
+                VisitDate = new DateOnly(2023, 1, 1),
+                CreateDate = new DateTime(2023, 1, 1, 7, 0, 0)
+            });
+        }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder builder)
+        {
+            builder.Properties<DateOnly>()
+                   .HaveConversion<DateOnlyConverter>()
+                   .HaveColumnType("date");
         }
     }
 }
