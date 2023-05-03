@@ -103,6 +103,8 @@ namespace WG.Guestbook.Web.Controllers
                 return View(model);
             }
 
+            _logger.LogInformation($"Create Entry for {author.UserName} succeeded.");
+
             return RedirectToAction("Index");
         }
 
@@ -146,6 +148,44 @@ namespace WG.Guestbook.Web.Controllers
                 CanDelete = canDelete
             };
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string? id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound(id);
+            }
+
+            var entry = await _context.Entries.Include(e => e.Author).FirstOrDefaultAsync(e => e.Id == id);
+            if(entry == null)
+            {
+                _logger.LogWarning($"Entry with id {id} could not be found.");
+                return NotFound(id);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if(user == null)
+            {
+                _logger.LogWarning($"User {User.Identity?.Name} could not be found.");
+                return BadRequest();
+            }
+
+            var isAuthor = entry.Author.Id == user.Id;
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            if(!isAuthor && !isAdmin)
+            {
+                _logger.LogWarning($"User {user.UserName} tried to delete entry by {entry.Author.UserName} (does not have permission to do so).");
+                return Forbid();
+            }
+
+            _context.Entries.Remove(entry);
+            var succeeded = await _context.SaveChangesAsync() > 0;
+
+            _logger.LogInformation($"User {user.UserName} deletes entry by {entry.Author.UserName}: {succeeded}");
+
+            return RedirectToAction("Index");
         }
     }
 }
