@@ -151,6 +151,113 @@ namespace WG.Guestbook.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Edit(string? id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound(id);
+            }
+
+            var entry = await _context.Entries.Include(e => e.Author).FirstOrDefaultAsync(e => e.Id == id);
+            if (entry == null)
+            {
+                _logger.LogWarning($"Entry with id {id} could not be found.");
+                return NotFound(id);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                _logger.LogWarning($"User {User.Identity?.Name} could not be found.");
+                return BadRequest();
+            }
+
+            var isAuthor = entry.Author.Id == user.Id;
+            if (!isAuthor)
+            {
+                _logger.LogWarning($"User {user.UserName} tries to edit entry by {entry.Author.UserName} (does not have permission to do so).");
+                return Forbid();
+            }
+
+            var model = new EditEntryViewModel()
+            {
+                EntryId = entry.Id,
+                AuthorId = entry.Author.Id,
+                Content = entry.Content,
+                VisitDate = entry.VisitDate,
+                DateMax = dateMax.ToString("yyyy-MM-dd"),
+                DateMin = dateMin.ToString("yyyy-MM-dd")
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditEntryViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var id = model.EntryId;
+
+            var entry = await _context.Entries.Include(e => e.Author).FirstOrDefaultAsync(e => e.Id == id);
+            if (entry == null)
+            {
+                _logger.LogWarning($"Entry with id {id} could not be found.");
+                return NotFound(id);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                _logger.LogWarning($"User {User.Identity?.Name} could not be found.");
+                return BadRequest();
+            }
+
+            var isAuthor = entry.Author.Id == user.Id;
+            if (!isAuthor)
+            {
+                _logger.LogWarning($"User {user.UserName} tried to edit entry by {entry.Author.UserName} (does not have permission to do so).");
+                return Forbid();
+            }
+
+            var newVisitDate = model.VisitDate;
+            var currentVisitDate = entry.VisitDate;
+            if (newVisitDate != currentVisitDate)
+            {
+                if (newVisitDate < dateMin)
+                {
+                    ModelState.AddModelError(nameof(model.VisitDate), $"Es sind nur Eintrag nach dem {dateMin} erlaubt.");
+                    return View(model);
+                }
+                if (newVisitDate > dateMax)
+                {
+                    ModelState.AddModelError(nameof(model.VisitDate), $"Wähle bitte einen Tag der nicht in der Zukunft liegt.");
+                    return View(model);
+                }
+
+                var hasEntryOnDate = await _context.Entries.Include(e => e.Author).Where(e => e.Author == user).AnyAsync(e => e.VisitDate == newVisitDate);
+                if (hasEntryOnDate)
+                {
+                    ModelState.AddModelError(nameof(model.VisitDate), "Du hast schon einen Eintrag an diesem Tag. Wähle ein anderes Datum aus.");
+                    return View(model);
+                }
+
+                entry.VisitDate = newVisitDate;
+            }
+
+            entry.Content = model.Content.Trim();
+
+            _context.Entries.Update(entry);
+            var succeeded = await _context.SaveChangesAsync() > 0;
+
+            _logger.LogInformation($"User {user.UserName} edited entry by {entry.Author.UserName}: {succeeded}");
+
+            return RedirectToAction("Details", new { id });
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Delete(string? id)
         {
             if (string.IsNullOrEmpty(id))
