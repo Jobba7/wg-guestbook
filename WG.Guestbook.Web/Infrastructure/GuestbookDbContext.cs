@@ -14,10 +14,10 @@ namespace WG.Guestbook.Web.Infrastructure
             // ensure that DbContext type accepts a DbContextOptions<TContext> object in its constructor and passes it to the base constructor for DbContext
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.EnableSensitiveDataLogging();
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.EnableSensitiveDataLogging();
+        //}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
