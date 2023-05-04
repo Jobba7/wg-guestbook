@@ -6,6 +6,10 @@
         <a asp-action="Create" class="btn btn-primary">Neuen Eintrag erstellen</a>
     </div>
     <br />
+    @if (!Model.Any())
+    {
+        <p>Noch keine Einträge vorhanden.</p>
+    }
     <div>
         @foreach (var entry in Model)
         {
