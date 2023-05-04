@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WG.Guestbook.Web.Domain;
 using WG.Guestbook.Web.Infrastructure;
+using WG.Guestbook.Web.Repositories;
 using WG.Guestbook.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +32,8 @@ if (builder.Environment.IsDevelopment())
 
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEntryRepository,  EntryRepository>();
+builder.Services.AddScoped<IEntryService,  EntryService>();
 
 var app = builder.Build();
 
