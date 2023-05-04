@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  wg.guestbook.web:
+    image: ${DOCKER_REGISTRY-}wgguestbookweb
+    build:
+      context: .
+      dockerfile: WG.Guestbook.Web/Dockerfile
