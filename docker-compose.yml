@@ -1,8 +1,28 @@
 version: '3.4'
 
+networks:
+  guestbook:
+
 services:
+  wg.guestbook.db:
+    container_name: guestbook-db
+    image: mcr.microsoft.com/azure-sql-edge
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password@12345#
+    networks:
+      - guestbook
   wg.guestbook.web:
+    container_name: guestbook-web
     image: ${DOCKER_REGISTRY-}wgguestbookweb
     build:
       context: .
       dockerfile: WG.Guestbook.Web/Dockerfile
+    depends_on:
+      - wg.guestbook.db
+    environment:
+        - DB_HOST=wg.guestbook.db
+        - DB_NAME=GuestBook
+        - DB_SA_PASSWORD=Password@12345#
+    networks:
+        - guestbook

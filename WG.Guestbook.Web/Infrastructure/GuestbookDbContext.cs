@@ -9,9 +9,11 @@ namespace WG.Guestbook.Web.Infrastructure
     {
         public DbSet<Entry> Entries { get; set; }
 
+        // ensure that DbContext type accepts a DbContextOptions<TContext> object in its constructor and passes it to the base constructor for DbContext
         public GuestbookDbContext(DbContextOptions<GuestbookDbContext> options) : base(options)
         {
-            // ensure that DbContext type accepts a DbContextOptions<TContext> object in its constructor and passes it to the base constructor for DbContext
+            // ensure that database is created and migrated
+            Database.Migrate();
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
