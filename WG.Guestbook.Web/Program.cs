@@ -29,7 +29,16 @@ if (builder.Environment.IsDevelopment())
         options.Password.RequireNonAlphanumeric = false;
         options.Password.RequireUppercase = false;
         options.Password.RequiredLength = 3;
-        options.Password.RequiredUniqueChars = 1;
+    });
+}
+else
+{
+    builder.Services.Configure<IdentityOptions>(options =>
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
     });
 }
 
