@@ -19,7 +19,7 @@ namespace WG.Guestbook.Web.Services
 
         public bool CheckRegistrationCode(string? code)
         {
-            const string registerCode = "CubaLibreX3000";
+            const string registerCode = "CubaLibre";
             code = code?.Trim();
 
             if (!registerCode.Equals(code, StringComparison.OrdinalIgnoreCase))
