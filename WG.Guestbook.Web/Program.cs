@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using WG.Guestbook.Web.Domain;
 using WG.Guestbook.Web.Infrastructure;
 using WG.Guestbook.Web.Repositories;
@@ -46,6 +47,10 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEntryRepository,  EntryRepository>();
 builder.Services.AddScoped<IEntryService,  EntryService>();
+
+var cultureInfo = new CultureInfo("de-DE");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 var app = builder.Build();
 
