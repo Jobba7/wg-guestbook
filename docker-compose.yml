@@ -21,6 +21,7 @@ services:
     depends_on:
       - wg.guestbook.db
     environment:
+        - TZ=Europe/Berlin
         - DB_HOST=wg.guestbook.db
         - DB_NAME=GuestBook
         - DB_SA_PASSWORD=Password@12345#
