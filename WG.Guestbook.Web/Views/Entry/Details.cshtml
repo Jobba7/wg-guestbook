@@ -3,7 +3,7 @@
 <h1>Eintrag von @Model.AuthorName</h1>
 <p>Erstellt am: @Model.CreateDate.ToString()</p>
 <h2>Über den Tag am @Model.VisitDate.ToLongDateString()</h2>
-<p>@Model.Content</p>
+<p class="textarea">@Model.Content</p>
 <a asp-action="Index" class="btn btn-primary">Zurück</a>
 @if (Model.CanEdit)
 {
