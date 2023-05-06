@@ -1,0 +1,39 @@
+﻿@model UserListViewModel
+@{
+    var isAdmin = Model.IsAdmin;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nutzername</th>
+            <th scope="col">Rollen</th>
+            @if (isAdmin)
+            {
+                <th scope="col"></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{
+        var count = 1;
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <th scope="row">@count</th>
+                <td>@user.UserName</td>
+                <td>@user.RoleNames</td>
+                @if (isAdmin)
+                {
+                    <td>
+                        <a asp-action="UpdateUserRoles" asp-route-Id="@user.Id">Rollen bearbeiten</a> |
+                        <a asp-action="Delete" asp-route-Id="@user.Id" onclick="return confirm('Nutzer @user.UserName wirklich dauerhaft löschen?')">löschen</a>
+                    </td>
+                }
+            </tr>
+            count++;
+        }
+        }
+    </tbody>
+</table>

@@ -6,6 +6,8 @@
 
         public bool IsAdmin { get; set; }
 
+        public bool IsRoommate { get; set; }
+
         public string? UserName { get; set; }
     }
 }

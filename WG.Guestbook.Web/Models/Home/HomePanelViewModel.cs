@@ -3,5 +3,7 @@
     public class HomePanelViewModel
     {
         public bool IsSignedIn { get; set; }
+
+        public bool IsAdmin { get; set; }
     }
 }

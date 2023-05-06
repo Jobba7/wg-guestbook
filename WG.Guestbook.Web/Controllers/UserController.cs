@@ -1,15 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WG.Guestbook.Web.Domain;
 using WG.Guestbook.Web.Models.User;
 using WG.Guestbook.Web.Services;
 
 namespace WG.Guestbook.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Roommate")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -22,16 +18,13 @@ namespace WG.Guestbook.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var allUsers = await _userService.GetAll();
-
-            var model = new UserListViewModel() { Users = allUsers };
-
-            return View(model);
+            return View();
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string? id)
         {
             if (string.IsNullOrEmpty(id))
@@ -54,7 +47,7 @@ namespace WG.Guestbook.Web.Controllers
         }
 
         [HttpGet]
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUserRoles(string? id)
         {
             if (string.IsNullOrEmpty(id))
@@ -81,7 +74,7 @@ namespace WG.Guestbook.Web.Controllers
         }
 
         [HttpPost]
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUserRoles(UpdateUserRolesViewModel model)
         {
             if (!ModelState.IsValid)

@@ -43,12 +43,14 @@ namespace WG.Guestbook.Web.Components
             }
 
             var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            var isRoommate = await _userManager.IsInRoleAsync(user, "Roommate");
 
             var model = new NavigationMenuViewModel()
             {
                 IsSignedIn = isSignedIn,
                 UserName = user.UserName,
-                IsAdmin = isAdmin
+                IsAdmin = isAdmin,
+                IsRoommate = isRoommate
             };
 
             return View(model);
