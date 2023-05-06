@@ -1,0 +1,20 @@
+﻿@model HomePanelViewModel
+
+<p>Willkommen! Du hast unser WG Gästebuch geöffnet.</p>
+@if (Model.IsSignedIn)
+{
+    <p>Jetzt wo du angemldet bist, hast du Zugriff auf folgende Funktionen:</p>
+    <ul>
+        <li>Konto verwalten (Nutzername und Passwort ändern)</li>
+        <li>Einträge ansehen, erstellen, bearbeiten und löschen</li>
+    </ul>
+    <p>Also worauf wartest du noch? Werde kreativ und schreibe einen Eintrag!</p>
+    <a asp-controller="Entry" asp-action="Create" class="btn btn-primary">Eintrag erstellen</a>
+    <a asp-controller="Entry" asp-action="Index" class="btn btn-secondary">Einträge ansehen</a>
+}
+else
+{
+    <p>Hier kannst du, wie bei einem normalen Gästebuch, etwas "reinschreiben" aka einen Eintrag erstellen. Dazu erstelle dir bitte ein Konto. Du benötigst ledeglich deinen Namen, ein Passwort und den Registrierungscode den du, falls noch nicht geschehen, von einem WG Mitbewohner bekommst.</p>
+    <a asp-controller="Account" asp-action="Register" class="btn btn-primary">Konto erstellen</a>
+    <a asp-controller="Account" asp-action="Login" class="btn btn-secondary">Anmelden</a>
+}
