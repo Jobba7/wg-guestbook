@@ -1,10 +1,6 @@
 ﻿@model AccesDeniedViewModel
 
-<h1>Du hast leider kein Zugriff auf diese Seite :(</h1>
-<div>
-    <a asp-controller="Home" asp-action="Index">Zurück zur Startseite</a>
-</div>
-<br />
-<div>
-    <a asp-action="Login" asp-route-ReturnUrl="@Model.ReturnUrl">Mit einem anderem Konto anmelden</a>
+<div class="text-center">
+    <h1>Zugriff verweigert</h1>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Zurück zur Startseite</a>
 </div>
