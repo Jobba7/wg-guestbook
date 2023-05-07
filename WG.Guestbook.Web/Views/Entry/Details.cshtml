@@ -1,15 +1,18 @@
 ﻿@model EntryDetailsViewModel
 
 <h1>Eintrag von @Model.AuthorName</h1>
+<h2>Über den @Model.VisitDate.ToLongDateString()</h2>
 <p>Erstellt am: @Model.CreateDate.ToString()</p>
-<h2>Über den Tag am @Model.VisitDate.ToLongDateString()</h2>
+<div>
+    <a asp-action="Index" class="btn btn-primary">Zurück</a>
+    @if (Model.CanEdit)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.EntryId" class="btn btn-warning">Bearbeiten</a>
+    }
+    @if (Model.CanDelete)
+    {
+        <a asp-action="Delete" asp-route-id="@Model.EntryId" class="btn btn-danger" onclick="return confirm('Eintrag wirklich dauerhaft löschen?')">Löschen</a>
+    }
+</div>
+<br />
 <p class="textarea">@Model.Content</p>
-<a asp-action="Index" class="btn btn-primary">Zurück</a>
-@if (Model.CanEdit)
-{
-    <a asp-action="Edit" asp-route-id="@Model.EntryId" class="btn btn-warning">Bearbeiten</a>
-}
-@if (Model.CanDelete)
-{
-    <a asp-action="Delete" asp-route-id="@Model.EntryId" class="btn btn-danger" onclick="return confirm('Eintrag wirklich dauerhaft löschen?')">Löschen</a>
-}

@@ -13,12 +13,16 @@
     <div>
         @foreach (var entry in Model)
         {
+            var content = entry.Content;
+            if(content.Length > 30)
+            {
+                content = content.Substring(0, 30) + " ...";
+            }
             <div class="card" style="margin-bottom: 20px">
                 <div class="card-body">
-                    <h5 class="card-title">Von @entry.Author über den Tag am @entry.VisitDate.ToLongDateString()</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">@entry.CreateDate</h6>
-                    <p class="card-text">@entry.Content</p>
-                    <a asp-action="Details" asp-route-id="@entry.Id">Details</a>
+                    <h5 class="card-title">@entry.Author am @entry.VisitDate.ToLongDateString()</h5>
+                    <h6 class="card-text">@content</h6>
+                    <a asp-action="Details" asp-route-id="@entry.Id" class="btn btn-secondary">Ansehen</a>
                 </div>
             </div>
         }
