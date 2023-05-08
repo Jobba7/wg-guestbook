@@ -1,0 +1,13 @@
+﻿@model int
+
+<div class="text-center">
+    @if(Model == 404)
+    {
+        <h1>Seite nicht gefunden</h1>
+    }
+    else
+    {
+        <h1>Fehler - @Model</h1>
+    }
+    <a asp-action="Index" class="btn btn-primary">Zurück zur Startseite</a>
+</div>

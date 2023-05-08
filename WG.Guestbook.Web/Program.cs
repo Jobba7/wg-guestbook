@@ -61,6 +61,8 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
+
 app.MapDefaultControllerRoute();
 
 app.Run();

@@ -8,5 +8,11 @@ namespace WG.Guestbook.Web.Controllers
         {
             return View();
         }
+
+        [Route("/Home/Error/{code:int}")]
+        public IActionResult Error(int code)
+        {
+            return View(code);
+        }
     }
 }
