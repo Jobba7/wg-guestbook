@@ -171,6 +171,9 @@ namespace WG.Guestbook.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditEntryViewModel model)
         {
+            model.DateMax = dateMax.ToString("yyyy-MM-dd");
+            model.DateMin = dateMin.ToString("yyyy-MM-dd");
+
             if (!ModelState.IsValid)
             {
                 return View(model);

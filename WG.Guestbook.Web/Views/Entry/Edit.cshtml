@@ -1,4 +1,11 @@
 ﻿@model EditEntryViewModel
+@{
+    var visitDate = Model.VisitDate.ToString("yyyy-MM-dd");
+    if (visitDate == DateOnly.MinValue.ToString("yyyy-MM-dd"))
+    {
+        visitDate = Model.DateMax;
+    }
+}
 
 <div class="text-center">
     <h1 class="display-4">Eintrag bearbeiten</h1>
@@ -9,7 +16,7 @@
             <div class="form-group">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <label asp-for="VisitDate"></label>
-                <input asp-for="VisitDate" class="form-control" value="@Model.VisitDate.ToString("yyyy-MM-dd")" min="@Model.DateMin" max="@Model.DateMax" />
+                <input asp-for="VisitDate" class="form-control" value="@visitDate" min="@Model.DateMin" max="@Model.DateMax" />
                 <span asp-validation-for="VisitDate" class="text-danger"></span>
             </div>
             <div class="form-group">
