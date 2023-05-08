@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Entry>
+﻿@model IEnumerable<EntryDTO>
 
 <div class="text-center">
     <h1 class="display-4">Gästebuch Einträge</h1>
@@ -13,16 +13,15 @@
     <div>
         @foreach (var entry in Model)
         {
-            var content = entry.Content;
-            if(content.Length > 30)
-            {
-                content = content.Substring(0, 30) + " ...";
-            }
             <div class="card" style="margin-bottom: 20px">
                 <div class="card-body">
-                    <h5 class="card-title">@entry.Author am @entry.VisitDate.ToLongDateString()</h5>
-                    <h6 class="card-text">@content</h6>
-                    <a asp-action="Details" asp-route-id="@entry.Id" class="btn btn-secondary">Ansehen</a>
+                    <h5 class="card-title">@entry.AuthorName am @entry.VisitDate</h5>
+                    <h6 class="card-text">@entry.ContentPreview</h6>
+                    <a asp-action="Details" asp-route-id="@entry.EntryId" class="btn btn-secondary">Ansehen</a>
+                    @if (entry.NumberOfLikes > 0)
+                    {
+                        <div><img src="~/img/heart-fill.svg" /> @entry.NumberOfLikes</div>
+                    }
                 </div>
             </div>
         }

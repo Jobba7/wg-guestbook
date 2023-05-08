@@ -59,6 +59,7 @@ namespace WG.Guestbook.Web.Infrastructure
             // relationships
             builder.Entity<User>().HasMany(u => u.Entries).WithOne(e => e.Author);
             builder.Entity<Entry>().HasOne(e => e.Author).WithMany(u => u.Entries);
+            builder.Entity<Entry>().HasMany(e => e.Likes).WithMany(u => u.LikedEntries);
         }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder builder)

@@ -6,7 +6,7 @@ namespace WG.Guestbook.Web.Services
 {
     public interface IEntryService
     {
-        Task<IEnumerable<Entry>> GetAllAsync();
+        Task<IEnumerable<EntryDTO>> GetAllAsync(User user);
 
         Task<Entry?> GetByIdAsync(string id);
 

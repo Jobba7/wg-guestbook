@@ -17,7 +17,7 @@ namespace WG.Guestbook.Web.Repositories
 
         public IQueryable<Entry> GetAll()
         {
-            return _context.Entries.Include(e => e.Author).OrderByDescending(e => e.CreateDate);
+            return _context.Entries.Include(e => e.Author).Include(e => e.Likes).OrderByDescending(e => e.CreateDate);
         }
 
         public async Task<bool> HasEntryOnDateAsync(User user, DateOnly date)
@@ -27,7 +27,7 @@ namespace WG.Guestbook.Web.Repositories
 
         public async Task<Entry?> GetByIdAsync(string id)
         {
-            return await _context.Entries.Include(e => e.Author).FirstOrDefaultAsync(e => e.Id == id);
+            return await _context.Entries.Include(e => e.Author).Include(e => e.Likes).FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<bool> AddAsync(Entry entry)

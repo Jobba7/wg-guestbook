@@ -7,6 +7,14 @@
 {
     <div>Zuletzt bearbeitet am: @Model.LastEditDate.ToString()</div>
 }
+@if (Model.IsLiked)
+{
+    <div><a asp-action="RemoveLike" asp-route-id="@Model.EntryId"><img src="~/img/heart-fill.svg" /></a> @Model.NumberOfLikes</div>
+}
+else
+{
+    <div><a asp-action="AddLike" asp-route-id="@Model.EntryId"><img src="~/img/heart.svg" /></a> @Model.NumberOfLikes</div>
+}
 <br />
 <div>
     <a asp-action="Index" class="btn btn-primary">Zurück</a>

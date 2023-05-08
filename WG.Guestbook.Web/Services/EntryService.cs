@@ -20,9 +20,31 @@ namespace WG.Guestbook.Web.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Entry>> GetAllAsync()
+        public async Task<IEnumerable<EntryDTO>> GetAllAsync(User user)
         {
-            return await _entryRepository.GetAll().ToListAsync();
+            var entries = new List<EntryDTO>();
+            foreach(var entry in await _entryRepository.GetAll().ToListAsync())
+            {
+                var contentPreview = entry.Content;
+                if (contentPreview.Length > 30)
+                {
+                    contentPreview = contentPreview.Substring(0, 30) + " ...";
+                }
+                var likes = entry.Likes;
+                var numberOfLikes = likes.Count;
+                var isLiked = likes.Any(u => u.Id == user.Id);
+                entries.Add(new EntryDTO
+                {
+                    EntryId = entry.Id,
+                    AuthorName = entry.Author.UserName!,
+                    ContentPreview = contentPreview,
+                    VisitDate = entry.VisitDate.ToLongDateString(),
+                    NumberOfLikes = numberOfLikes,
+                    IsLiked = isLiked
+                });
+            }
+
+            return entries;
         }
 
         public async Task<Entry?> GetByIdAsync(string id)

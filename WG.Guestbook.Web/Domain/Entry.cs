@@ -14,6 +14,8 @@
 
         public User Author { get; set; } = default!;
 
+        public ICollection<User> Likes { get; set; } = default!;
+
         public Entry()
         {
             Id = Guid.NewGuid().ToString();

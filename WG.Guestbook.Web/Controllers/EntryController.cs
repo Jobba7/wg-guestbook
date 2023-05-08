@@ -1,5 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using WG.Guestbook.Web.Domain;
+using WG.Guestbook.Web.Infrastructure;
 using WG.Guestbook.Web.Models.Entry;
 using WG.Guestbook.Web.Services;
 
@@ -8,22 +13,31 @@ namespace WG.Guestbook.Web.Controllers
     [Authorize]
     public class EntryController : Controller
     {
+        private readonly UserManager<User> _userManager;
         private readonly IEntryService _entryService;
         private readonly ILogger<EntryController> _logger;
+        private readonly GuestbookDbContext _context;
 
         private readonly DateOnly dateMin = new(2023, 1, 1);
         private readonly DateOnly dateMax = DateOnly.FromDateTime(DateTime.Now);
 
-        public EntryController(IEntryService entryService, ILogger<EntryController> logger)
+        public EntryController(UserManager<User> userManager, IEntryService entryService, ILogger<EntryController> logger, GuestbookDbContext context)
         {
+            _userManager = userManager;
             _entryService = entryService;
             _logger = logger;
+            _context = context;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var entries = await _entryService.GetAllAsync();
+            var user = await _userManager.GetUserAsync(User);
+            if(user == null)
+            {
+                return BadRequest();
+            }
+            var entries = await _entryService.GetAllAsync(user);
             return View(entries);
         }
 
@@ -106,11 +120,13 @@ namespace WG.Guestbook.Web.Controllers
 
             var canEdit = false;
             var canDelete = false;
+            var isLiked = false;
             var user = await _entryService.GetUserAsync(User);
             if (user != null)
             {
                 canEdit = _entryService.UserCanEditEntry(user, entry);
                 canDelete = await _entryService.UserCanDeleteEntryAsync(user, entry);
+                isLiked = entry.Likes.Any(u => u.Id == user.Id);
             }
 
             var model = new EntryDetailsViewModel()
@@ -120,10 +136,12 @@ namespace WG.Guestbook.Web.Controllers
                 VisitDate = entry.VisitDate,
                 CreateDate = entry.CreateDate,
                 LastEditDate = entry.LastEditDate,
-                AuthorName = entry.Author.UserName,
+                AuthorName = entry.Author.UserName!,
                 AuthorId = entry.Author.Id,
                 CanEdit = canEdit,
-                CanDelete = canDelete
+                CanDelete = canDelete,
+                NumberOfLikes = entry.Likes.Count,
+                IsLiked = isLiked
             };
             return View(model);
         }
@@ -252,6 +270,60 @@ namespace WG.Guestbook.Web.Controllers
             await _entryService.DeleteAsync(user, entry);
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddLike(string? id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToAction("NotFound");
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var entry = await _entryService.GetByIdAsync(id);
+            if (entry == null)
+            {
+                return RedirectToAction("NotFound");
+            }
+
+            entry.Likes.Add(user);
+            _context.Update(entry);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RemoveLike(string? id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToAction("NotFound");
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var entry = await _entryService.GetByIdAsync(id);
+            if (entry == null)
+            {
+                return RedirectToAction("NotFound");
+            }
+
+            entry.Likes.Remove(user);
+            _context.Update(entry);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id });
         }
     }
 }
