@@ -1,8 +1,13 @@
 ﻿@model EntryDetailsViewModel
 
 <h1>Eintrag von @Model.AuthorName</h1>
-<h2>Über den @Model.VisitDate.ToLongDateString()</h2>
-<p>Erstellt am: @Model.CreateDate.ToString()</p>
+<h2>Über @Model.VisitDate.ToLongDateString()</h2>
+<div>Erstellt am: @Model.CreateDate.ToString()</div>
+@if (Model.LastEditDate > Model.CreateDate)
+{
+    <div>Zuletzt bearbeitet am: @Model.LastEditDate.ToString()</div>
+}
+<br />
 <div>
     <a asp-action="Index" class="btn btn-primary">Zurück</a>
     @if (Model.CanEdit)

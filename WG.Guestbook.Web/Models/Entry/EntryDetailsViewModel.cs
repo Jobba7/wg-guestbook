@@ -7,6 +7,7 @@
 
         public DateOnly VisitDate { get; set; }
         public DateTime CreateDate { get; set; }
+        public DateTime LastEditDate { get; set; }
 
         public string? AuthorName { get; set; }
         public string AuthorId { get; set; } = default!;

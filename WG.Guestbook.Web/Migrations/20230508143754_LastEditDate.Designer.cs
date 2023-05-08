@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WG.Guestbook.Web.Infrastructure;
 
@@ -11,9 +12,11 @@ using WG.Guestbook.Web.Infrastructure;
 namespace WG.Guestbook.Web.Migrations
 {
     [DbContext(typeof(GuestbookDbContext))]
-    partial class GuestbookDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230508143754_LastEditDate")]
+    partial class LastEditDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

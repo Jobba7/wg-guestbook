@@ -10,6 +10,8 @@
 
         public DateTime CreateDate { get; set; }
 
+        public DateTime LastEditDate { get; set; }
+
         public User Author { get; set; } = default!;
 
         public Entry()

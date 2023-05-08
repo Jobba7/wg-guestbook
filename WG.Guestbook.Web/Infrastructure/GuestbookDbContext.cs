@@ -59,16 +59,6 @@ namespace WG.Guestbook.Web.Infrastructure
             // relationships
             builder.Entity<User>().HasMany(u => u.Entries).WithOne(e => e.Author);
             builder.Entity<Entry>().HasOne(e => e.Author).WithMany(u => u.Entries);
-
-            // seed entries
-            builder.Entity<Entry>().HasData(new
-            {
-                Id = Guid.NewGuid().ToString(),
-                AuthorId = user.Id,
-                Content = "Hello World!",
-                VisitDate = new DateOnly(2023, 1, 1),
-                CreateDate = new DateTime(2023, 1, 1, 7, 0, 0)
-            });
         }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder builder)

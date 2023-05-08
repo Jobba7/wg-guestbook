@@ -119,6 +119,7 @@ namespace WG.Guestbook.Web.Controllers
                 Content = entry.Content,
                 VisitDate = entry.VisitDate,
                 CreateDate = entry.CreateDate,
+                LastEditDate = entry.LastEditDate,
                 AuthorName = entry.Author.UserName,
                 AuthorId = entry.Author.Id,
                 CanEdit = canEdit,

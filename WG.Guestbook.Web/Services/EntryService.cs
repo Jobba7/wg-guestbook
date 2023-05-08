@@ -51,6 +51,7 @@ namespace WG.Guestbook.Web.Services
                 Content = content,
                 VisitDate = visitDate,
                 CreateDate = createDate,
+                LastEditDate = createDate,
                 Author = user,
             };
 
@@ -85,6 +86,7 @@ namespace WG.Guestbook.Web.Services
                 });
             }
 
+            var changed = false;
             var newVisitDate = model.VisitDate;
             var currentVisitDate = entry.VisitDate;
             if (newVisitDate != currentVisitDate)
@@ -96,13 +98,25 @@ namespace WG.Guestbook.Web.Services
                 }
 
                 entry.VisitDate = newVisitDate;
+                changed = true;
             }
 
-            entry.Content = model.Content.Trim();
-
-            var succeeded = await _entryRepository.UpdateAsync(entry);
-
-            _logger.LogInformation($"User {user.UserName} edited entry by {entry.Author.UserName}: {succeeded}");
+            var newContent = model.Content.Trim();
+            if (!entry.Content.Equals(newContent))
+            {
+                entry.Content = newContent;
+                changed = true;
+            }
+            if (changed)
+            {
+                entry.LastEditDate = DateTime.Now;
+                var succeeded = await _entryRepository.UpdateAsync(entry);
+                _logger.LogInformation($"User {user.UserName} edited entry by {entry.Author.UserName}: {succeeded}");
+            }
+            else
+            {
+                _logger.LogInformation($"User {user.UserName} edited entry by {entry.Author.UserName}: No changes");
+            }
 
             return Result.Success;
         }
