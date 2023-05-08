@@ -28,6 +28,12 @@ namespace WG.Guestbook.Web.Controllers
         }
 
         [HttpGet]
+        public new IActionResult NotFound()
+        {
+            return View();
+        }
+
+        [HttpGet]
         [Authorize(Roles = "Guest")]
         public IActionResult Create()
         {
@@ -87,7 +93,7 @@ namespace WG.Guestbook.Web.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return NotFound(id);
+                return RedirectToAction("NotFound");
             }
 
             var entry = await _entryService.GetByIdAsync(id);
@@ -95,7 +101,7 @@ namespace WG.Guestbook.Web.Controllers
             if (entry == null)
             {
                 _logger.LogWarning($"Entry with id {id} could not be found.");
-                return NotFound(id);
+                return RedirectToAction("NotFound");
             }
 
             var canEdit = false;
@@ -126,14 +132,14 @@ namespace WG.Guestbook.Web.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return NotFound(id);
+                return RedirectToAction("NotFound");
             }
 
             var entry = await _entryService.GetByIdAsync(id);
             if (entry == null)
             {
                 _logger.LogWarning($"Entry with id {id} could not be found.");
-                return NotFound(id);
+                return RedirectToAction("NotFound");
             }
 
             var user = await _entryService.GetUserAsync(User);
@@ -176,7 +182,7 @@ namespace WG.Guestbook.Web.Controllers
             if (entry == null)
             {
                 _logger.LogWarning($"Entry with id {id} could not be found.");
-                return NotFound(id);
+                return RedirectToAction("NotFound");
             }
 
             var user = await _entryService.GetUserAsync(User);
@@ -215,14 +221,14 @@ namespace WG.Guestbook.Web.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return NotFound(id);
+                return RedirectToAction("NotFound");
             }
 
             var entry = await _entryService.GetByIdAsync(id);
             if (entry == null)
             {
                 _logger.LogWarning($"Entry with id {id} could not be found.");
-                return NotFound(id);
+                return RedirectToAction("NotFound");
             }
 
             var user = await _entryService.GetUserAsync(User);
